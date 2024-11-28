@@ -2,7 +2,6 @@ package com.example.JWT.Token.Implementation.jwtconfig;
 
 
 import org.springframework.stereotype.Component;
-
 import java.util.Date;
 
 @Component
