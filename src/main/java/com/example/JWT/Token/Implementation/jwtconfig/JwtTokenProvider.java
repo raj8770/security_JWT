@@ -1,13 +1,17 @@
 package com.example.JWT.Token.Implementation.jwtconfig;
 
-
+import io.jsonwebtoken.Jwts;
+import io.jsonwebtoken.SignatureAlgorithm;
+import io.jsonwebtoken.security.Keys;
 import org.springframework.stereotype.Component;
+import java.security.Key;
 import java.util.Date;
 
 @Component
 public class JwtTokenProvider {
 
-    private static final String SECRET_KEY = "your_secret_key"; // Use a strong secret key in real-world apps
+    // Correcting the key type to Key, not String
+    private static final Key SECRET_KEY = Keys.secretKeyFor(SignatureAlgorithm.HS512);
     private static final long EXPIRATION_TIME = 864_000_000; // 10 days
 
     // Generate a JWT token
@@ -16,7 +20,7 @@ public class JwtTokenProvider {
                 .setSubject(username)
                 .setIssuedAt(new Date())
                 .setExpiration(new Date(System.currentTimeMillis() + EXPIRATION_TIME))
-                .signWith(SignatureAlgorithm.HS512, SECRET_KEY)
+                .signWith(SECRET_KEY)  // Use the Key object directly
                 .compact();
     }
 
@@ -39,4 +43,3 @@ public class JwtTokenProvider {
                 .getSubject();
     }
 }
-

@@ -23,13 +23,12 @@ public class SecurityConfig {
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         http
+                .csrf(csrf -> csrf.disable()) // Disable CSRF using the new approach
                 .authorizeHttpRequests(auth -> auth
-                        .requestMatchers("/login").permitAll()  // Allow login route without authentication
-                        .anyRequest().authenticated()          // Protect all other routes
+                        .requestMatchers("/api/login", "/api/signup").permitAll() // Allow public access to login and signup
+                        .anyRequest().authenticated() // Require authentication for all other endpoints
                 )
-                .addFilter(new JwtAuthenticationFilter(jwtTokenProvider));  // Add JWT filter for stateless authentication
-                //.formLogin().disable()  // Remove form-based login (not needed with JWT)
-                //.httpBasic().disable(); // Remove HTTP Basic authentication (optional)
+                .addFilter(new JwtAuthenticationFilter(jwtTokenProvider)); // Add JWT filter for authentication
 
         return http.build();
     }
@@ -45,4 +44,3 @@ public class SecurityConfig {
         return new BCryptPasswordEncoder();
     }
 }
-
